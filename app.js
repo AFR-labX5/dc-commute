@@ -6,7 +6,6 @@ const STOPS = {
 };
 
 async function getPredictions(stopId) {
-
   const url =
     "https://api.wmata.com/NextBusService.svc/json/jPredictions" +
     "?StopID=" + stopId +
@@ -22,10 +21,11 @@ async function getPredictions(stopId) {
 }
 
 function renderPredictions(elementId, data) {
-
   const element = document.getElementById(elementId);
 
-  if (!element) return;
+  if (!element) {
+    return;
+  }
 
   if (!data.Predictions || data.Predictions.length === 0) {
     element.innerHTML = "No upcoming buses";
@@ -34,32 +34,38 @@ function renderPredictions(elementId, data) {
 
   element.innerHTML = data.Predictions
     .slice(0, 2)
-    .map(p => `
-      <div class="prediction">
-        <strong>${p.RouteID}</strong>
-        <span>${p.Minutes === 0 ? "NOW" : p.Minutes + " min"}</span>
-      </div>
-    `)
+    .map(function (prediction) {
+      const minutes = prediction.Minutes;
+
+      return `
+        <div class="prediction">
+          <strong>${prediction.RouteID}</strong>
+          <span>
+            ${minutes === 0 ? "NOW" : minutes + " min"}
+          </span>
+        </div>
+      `;
+    })
     .join("");
 }
 
 async function loadMorning() {
-
   const status = document.getElementById("last-update");
 
   try {
-
     status.textContent = "Updating WMATA...";
 
-    // Do D94 first
+    // D94
     const d94 = await getPredictions(STOPS.morningD94);
 
     renderPredictions("morning-d94", d94);
 
-    // Wait before asking for C81
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    // Wait 3 seconds before the second WMATA request
+    await new Promise(function (resolve) {
+      setTimeout(resolve, 3000);
+    });
 
-    // Then C81
+    // C81
     const c81 = await getPredictions(STOPS.morningC81);
 
     renderPredictions("morning-c81", c81);
@@ -69,14 +75,15 @@ async function loadMorning() {
       new Date().toLocaleTimeString();
 
   } catch (error) {
-
-    console.error(error);
+    console.error("WMATA error:", error);
 
     status.textContent =
       "WMATA error: " + error.message;
   }
 }
 
+// Load immediately
 loadMorning();
 
+// Refresh every 2 minutes
 setInterval(loadMorning, 120000);
