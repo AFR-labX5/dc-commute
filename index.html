@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b57d0">
+
+  <title>DC Commute</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f5f7;
+      color: #17202a;
+    }
+
+    .header {
+      background: #0b57d0;
+      color: white;
+      padding: 24px 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .header p {
+      margin: 6px 0 0;
+      opacity: 0.9;
+    }
+
+    .container {
+      padding: 16px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    .route {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .route-title {
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .route-details {
+      color: #555;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .recommended {
+      border: 2px solid #16803c;
+      background: #f0fff4;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #16803c;
+      color: white;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .time {
+      font-size: 26px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .status {
+      text-align: center;
+      color: #666;
+      font-size: 13px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>🚍 DC Commute</h1>
+    <p>Home ↔ Forrestal</p>
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>☀️ Morning — To Forrestal</h2>
+
+      <div class="route recommended">
+        <span class="badge">RECOMMENDED</span>
+
+        <div class="route-title">
+          🚌 D94
+        </div>
+
+        <div class="route-details">
+          Dana / MacArthur or Arizona / MacArthur<br>
+          ↓<br>
+          D94 → Downtown<br>
+          ↓<br>
+          Blue / Orange / Silver → Smithsonian<br>
+          ↓<br>
+          Forrestal
+        </div>
+
+        <div class="time">
+          Live data coming soon
+        </div>
+      </div>
+
+      <div class="route">
+        <div class="route-title">
+          🚌 C81
+        </div>
+
+        <div class="route-details">
+          Home → C81<br>
+          ↓<br>
+          Metro Center<br>
+          ↓<br>
+          Blue / Orange / Silver → Smithsonian<br>
+          ↓<br>
+          Forrestal
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <h2>🌙 Evening — Home</h2>
+
+      <div class="route recommended">
+        <span class="badge">RECOMMENDED</span>
+
+        <div class="route-title">
+          🚇 C81
+        </div>
+
+        <div class="route-details">
+          Forrestal → Smithsonian<br>
+          ↓<br>
+          Blue / Orange / Silver → Metro Center<br>
+          ↓<br>
+          C81 → Home
+        </div>
+
+        <div class="time">
+          Live data coming soon
+        </div>
+      </div>
+
+      <div class="route">
+        <div class="route-title">
+          🚌 D94
+        </div>
+
+        <div class="route-details">
+          Forrestal → Farragut West<br>
+          ↓<br>
+          D94 → MacArthur<br>
+          ↓<br>
+          Dana / Arizona
+        </div>
+      </div>
+    </div>
+
+    <div class="status">
+      WMATA real-time integration coming next.
+    </div>
+
+  </div>
+
+</body>
+</html>
