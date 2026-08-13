@@ -1,10 +1,12 @@
-const WMATA_DEMO_KEY = c1465485fa734a95bcbd6fa6628ff51d;
+const WMATA_API_KEY = "e13626d03d8e4c03ac07f95541b3091b";
+
 const STOPS = {
   morningD94: "1001889",
   morningC81: "1003095"
 };
 
 async function getPredictions(stopId) {
+
   const url =
     "https://api.wmata.com/NextBusService.svc/json/jPredictions" +
     "?StopID=" + stopId +
@@ -20,6 +22,7 @@ async function getPredictions(stopId) {
 }
 
 function renderPredictions(elementId, data) {
+
   const element = document.getElementById(elementId);
 
   if (!element) return;
@@ -30,7 +33,7 @@ function renderPredictions(elementId, data) {
   }
 
   element.innerHTML = data.Predictions
-    .slice(0, 3)
+    .slice(0, 2)
     .map(p => `
       <div class="prediction">
         <strong>${p.RouteID}</strong>
@@ -41,19 +44,24 @@ function renderPredictions(elementId, data) {
 }
 
 async function loadMorning() {
+
   const status = document.getElementById("last-update");
 
   try {
+
     status.textContent = "Updating WMATA...";
 
+    // Do D94 first
     const d94 = await getPredictions(STOPS.morningD94);
 
-    // Small delay to avoid hammering the API
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    renderPredictions("morning-d94", d94);
 
+    // Wait before asking for C81
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    // Then C81
     const c81 = await getPredictions(STOPS.morningC81);
 
-    renderPredictions("morning-d94", d94);
     renderPredictions("morning-c81", c81);
 
     status.textContent =
@@ -61,6 +69,7 @@ async function loadMorning() {
       new Date().toLocaleTimeString();
 
   } catch (error) {
+
     console.error(error);
 
     status.textContent =
@@ -70,4 +79,4 @@ async function loadMorning() {
 
 loadMorning();
 
-setInterval(loadMorning, 60000);
+setInterval(loadMorning, 120000);
