@@ -13,38 +13,37 @@ async function getPredictions(stopId) {
     "?StopID=" + stopId +
     "&api_key=" + WMATA_DEMO_KEY;
 
-  console.log("Calling WMATA:", stopId);
-
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error("WMATA HTTP error: " + response.status);
+    throw new Error("WMATA HTTP " + response.status);
   }
 
   return await response.json();
 }
 
-function showResult(id, data) {
-  const element = document.getElementById(id);
+function renderPredictions(elementId, data) {
 
-  if (!element) {
-    return;
-  }
+  const element = document.getElementById(elementId);
+
+  if (!element) return;
 
   if (!data.Predictions || data.Predictions.length === 0) {
-    element.innerHTML = "No buses currently predicted";
+    element.innerHTML = "No upcoming buses";
     return;
   }
 
   element.innerHTML = data.Predictions
     .slice(0, 3)
     .map(function(p) {
+
       return `
         <div class="prediction">
           <strong>${p.RouteID}</strong>
-          <span>${p.Minutes} min</span>
+          <span>${p.Minutes === 0 ? "NOW" : p.Minutes + " min"}</span>
         </div>
       `;
+
     })
     .join("");
 }
@@ -55,14 +54,22 @@ async function loadTransitData() {
 
   try {
 
-    status.textContent = "Connecting to WMATA...";
+    status.textContent = "Updating WMATA...";
 
-    const d94Morning = await getPredictions(STOPS.morningD94);
+    const results = await Promise.all([
+      getPredictions(STOPS.morningD94),
+      getPredictions(STOPS.morningC81),
+      getPredictions(STOPS.eveningD94Dana),
+      getPredictions(STOPS.eveningD94Arizona)
+    ]);
 
-    showResult("morning-d94", d94Morning);
+    renderPredictions("morning-d94", results[0]);
+    renderPredictions("morning-c81", results[1]);
+    renderPredictions("evening-d94-dana", results[2]);
+    renderPredictions("evening-d94-arizona", results[3]);
 
     status.textContent =
-      "WMATA connected • " +
+      "Live WMATA • Updated " +
       new Date().toLocaleTimeString();
 
   } catch (error) {
@@ -70,8 +77,10 @@ async function loadTransitData() {
     console.error(error);
 
     status.textContent =
-      "WMATA ERROR: " + error.message;
+      "WMATA error: " + error.message;
   }
 }
 
 loadTransitData();
+
+setInterval(loadTransitData, 30000);
