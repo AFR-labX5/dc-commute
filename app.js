@@ -9,97 +9,69 @@ const STOPS = {
 
 async function getPredictions(stopId) {
   const url =
-    `https://api.wmata.com/NextBusService.svc/json/jPredictions` +
-    `?StopID=${stopId}&api_key=${WMATA_DEMO_KEY}`;
+    "https://api.wmata.com/NextBusService.svc/json/jPredictions" +
+    "?StopID=" + stopId +
+    "&api_key=" + WMATA_DEMO_KEY;
+
+  console.log("Calling WMATA:", stopId);
 
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(`WMATA error: ${response.status}`);
+    throw new Error("WMATA HTTP error: " + response.status);
   }
 
   return await response.json();
 }
 
-function formatMinutes(minutes) {
-  if (minutes === 0) return "Now";
-  if (minutes === 1) return "1 min";
-  return `${minutes} min`;
-}
+function showResult(id, data) {
+  const element = document.getElementById(id);
 
-function renderPredictions(elementId, data, direction) {
-  const element = document.getElementById(elementId);
-
-  if (!element) return;
-
-  const predictions = data.Predictions
-    .filter(p => p.DirectionText === direction)
-    .slice(0, 3);
-
-  if (predictions.length === 0) {
-    element.innerHTML = "No upcoming buses";
+  if (!element) {
     return;
   }
 
-  element.innerHTML = predictions.map(p => `
-    <div class="prediction">
-      <strong>${p.RouteID}</strong>
-      <span>${formatMinutes(p.Minutes)}</span>
-    </div>
-  `).join("");
+  if (!data.Predictions || data.Predictions.length === 0) {
+    element.innerHTML = "No buses currently predicted";
+    return;
+  }
+
+  element.innerHTML = data.Predictions
+    .slice(0, 3)
+    .map(function(p) {
+      return `
+        <div class="prediction">
+          <strong>${p.RouteID}</strong>
+          <span>${p.Minutes} min</span>
+        </div>
+      `;
+    })
+    .join("");
 }
 
 async function loadTransitData() {
+
+  const status = document.getElementById("last-update");
+
   try {
 
-    const [
-      morningD94,
-      morningC81,
-      eveningDana,
-      eveningArizona
-    ] = await Promise.all([
-      getPredictions(STOPS.morningD94),
-      getPredictions(STOPS.morningC81),
-      getPredictions(STOPS.eveningD94Dana),
-      getPredictions(STOPS.eveningD94Arizona)
-    ]);
+    status.textContent = "Connecting to WMATA...";
 
-    renderPredictions(
-      "morning-d94",
-      morningD94,
-      "East to Gallery Place"
-    );
+    const d94Morning = await getPredictions(STOPS.morningD94);
 
-    renderPredictions(
-      "morning-c81",
-      morningC81,
-      "East to Fort Totten"
-    );
+    showResult("morning-d94", d94Morning);
 
-    renderPredictions(
-      "evening-d94-dana",
-      eveningDana,
-      "West to Sibley Hospital"
-    );
-
-    renderPredictions(
-      "evening-d94-arizona",
-      eveningArizona,
-      "West to Sibley Hospital"
-    );
-
-    document.getElementById("last-update").textContent =
-      "Updated " + new Date().toLocaleTimeString();
+    status.textContent =
+      "WMATA connected • " +
+      new Date().toLocaleTimeString();
 
   } catch (error) {
 
     console.error(error);
 
-    document.getElementById("last-update").textContent =
-      "Unable to load WMATA data";
+    status.textContent =
+      "WMATA ERROR: " + error.message;
   }
 }
 
 loadTransitData();
-
-setInterval(loadTransitData, 30000);
