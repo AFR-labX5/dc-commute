@@ -1,4 +1,4 @@
-const WMATA_DEMO_KEY = "c1465485fa734a95bcbd6fa6628ff51d";
+const WMATA_DEMO_KEY = c1465485fa734a95bcbd6fa6628ff51d;
 const STOPS = {
   morningD94: "1001889",
   morningC81: "1003095"
