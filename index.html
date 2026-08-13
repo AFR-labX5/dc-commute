@@ -91,7 +91,29 @@
     .time {
       font-size: 26px;
       font-weight: bold;
-      margin-top: 8px;
+      margin-top: 12px;
+    }
+
+    .prediction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .prediction:last-child {
+      border-bottom: none;
+    }
+
+    .prediction strong {
+      font-size: 18px;
+    }
+
+    .prediction span {
+      font-size: 20px;
+      font-weight: bold;
+      color: #16803c;
     }
 
     .status {
@@ -99,6 +121,7 @@
       color: #666;
       font-size: 13px;
       margin-top: 20px;
+      margin-bottom: 30px;
     }
   </style>
 </head>
@@ -112,93 +135,144 @@
 
   <div class="container">
 
+    <!-- MORNING -->
+
     <div class="card">
       <h2>☀️ Morning — To Forrestal</h2>
 
+      <!-- D94 -->
+
       <div class="route recommended">
-        <span class="badge">RECOMMENDED</span>
+
+        <span class="badge">D94 OPTION</span>
 
         <div class="route-title">
-          🚌 D94
+          🚌 D94 — Dana / MacArthur
         </div>
 
         <div class="route-details">
-          Dana / MacArthur or Arizona / MacArthur<br>
+          Dana / MacArthur<br>
           ↓<br>
-          D94 → Downtown<br>
+          D94 → Gallery Place<br>
           ↓<br>
-          Blue / Orange / Silver → Smithsonian<br>
+          Metrorail → Smithsonian<br>
           ↓<br>
           Forrestal
         </div>
 
-        <div class="time">
-          Live data coming soon
+        <div class="time" id="morning-d94">
+          Loading...
         </div>
+
       </div>
 
+
+      <!-- C81 -->
+
       <div class="route">
+
+        <div class="route-title">
+          🚌 C81 — Arizona / MacArthur
+        </div>
+
+        <div class="route-details">
+          Arizona / MacArthur<br>
+          ↓<br>
+          C81 → Tenleytown-AU<br>
+          ↓<br>
+          Red Line → downtown<br>
+          ↓<br>
+          Smithsonian<br>
+          ↓<br>
+          Forrestal
+        </div>
+
+        <div class="time" id="morning-c81">
+          Loading...
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- EVENING -->
+
+    <div class="card">
+
+      <h2>🌙 Evening — Home</h2>
+
+
+      <!-- C81 -->
+
+      <div class="route recommended">
+
+        <span class="badge">C81 OPTION</span>
+
         <div class="route-title">
           🚌 C81
         </div>
 
         <div class="route-details">
-          Home → C81<br>
+          Forrestal<br>
           ↓<br>
-          Metro Center<br>
+          Metrorail → Tenleytown-AU<br>
           ↓<br>
-          Blue / Orange / Silver → Smithsonian<br>
+          C81 → Arizona / MacArthur<br>
           ↓<br>
-          Forrestal
-        </div>
-      </div>
-    </div>
-
-
-    <div class="card">
-      <h2>🌙 Evening — Home</h2>
-
-      <div class="route recommended">
-        <span class="badge">RECOMMENDED</span>
-
-        <div class="route-title">
-          🚇 C81
-        </div>
-
-        <div class="route-details">
-          Forrestal → Smithsonian<br>
-          ↓<br>
-          Blue / Orange / Silver → Metro Center<br>
-          ↓<br>
-          C81 → Home
+          Home
         </div>
 
         <div class="time">
-          Live data coming soon
+          Live C81 return coming next
         </div>
+
       </div>
 
+
+      <!-- D94 -->
+
       <div class="route">
+
         <div class="route-title">
           🚌 D94
         </div>
 
         <div class="route-details">
-          Forrestal → Farragut West<br>
+          Forrestal<br>
           ↓<br>
-          D94 → MacArthur<br>
+          Metrorail → Farragut West<br>
           ↓<br>
-          Dana / Arizona
+          D94 → Dana / Arizona<br>
+          ↓<br>
+          Home
         </div>
+
+        <div class="time">
+          <div id="evening-d94-dana">
+            Loading...
+          </div>
+
+          <div id="evening-d94-arizona">
+            Loading...
+          </div>
+        </div>
+
       </div>
+
     </div>
 
+
     <div class="status">
-      WMATA real-time integration coming next.
+      <span id="last-update">
+        Connecting to WMATA...
+      </span>
     </div>
 
   </div>
-  
-<script src="app.js"></script>
+
+  <!-- WMATA / application logic -->
+  <script src="app.js"></script>
+
 </body>
 </html>
